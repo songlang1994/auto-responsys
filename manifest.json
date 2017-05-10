@@ -1,0 +1,24 @@
+{
+  "name": "Auto-Responsys",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "Auto Fill in Responsys",
+
+  "permissions": ["tabs"],
+
+  "browser_action": {
+    "default_title": "Auto-Responsys",
+    "default_popup": "popup.html"
+  },
+
+  "background": {
+    "scripts": ["dist/bgworker.js"]
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://interact2.responsys.net/*"],
+      "js": ["lib/jquery.min.js", "dist/content-script.js"]
+    }
+  ]
+}
