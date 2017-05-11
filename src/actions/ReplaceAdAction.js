@@ -43,7 +43,7 @@ class ReplaceAdAction extends BaseAction {
             let adReplacingArea = this.content.match(AD_AREA_REPLACE_CONTENT_PATTERN)
             if(adReplacingArea !== null && adReplacingArea.length === 1) {
               let newAdArea = '<!-- Start Ad Card -->\n' +
-                              tr.outerHTML +
+                              tr.outerHTML.replace(/&amp;/g, '&') +
                               '\n<!-- End Ad Card -->';
               Logger.info('\n====Replacing AD:==== \n' + adReplacingArea[0] + '\n====with:====\n' + newAdArea);
               this.content = this.content.replace(adReplacingArea[0], newAdArea);
@@ -71,6 +71,11 @@ class ReplaceAdAction extends BaseAction {
 
   _saveChanges() {
     $(CONTENT_TEXTAREA).val(this.content);
+    // mock. not really submit changes
+
+    this._triggerEvent(C.CONTENT_PAGE_EVENTS.REPLACED_AD, () => {
+      window.close();
+    });
   }
 
   _doReplacePixels(pixelsSnippet) {

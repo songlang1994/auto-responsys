@@ -10,12 +10,18 @@ export const INTENT = Object.freeze({
   PUSH_APP_STATUS: 'push-app-status',
   GET_TB_STAGES: 'get-tb-stages',
   PUSH_LOG: 'push-log',
-  GET_LOG: 'get-log'
+  GET_LOG: 'get-log',
+  TRIGGER_EVENT: 'trigger-event'
 });
 
 export const TB_STAGE_FOLDERS = Object.freeze({
   PRENATAL: 'TB_Stages_Prenatal',
   POSTNATAL: 'TB_Stages_Postnatal'
+});
+
+export const CONTENT_PAGE_EVENTS = Object.freeze({
+  REPLACED_AD: 'replaced-ad',
+  ADDED_LINK_TABLE: 'added-link-table'
 });
 
 export const TB_STAGES = Object.freeze([

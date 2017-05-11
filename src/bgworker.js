@@ -6,6 +6,15 @@ if(localStorage.log === undefined) {
   localStorage.log = '';
 }
 
+let globalvars = {};
+
+function writeLog(level, message) {
+  let timenow = new Date().toISOString();
+  let log = `${timenow} ${level} ${message}\n`;
+  console.log(log);
+  localStorage.log += log;
+}
+
 chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
   switch(request.intent) {
     case C.INTENT.USER_INFO:
@@ -26,7 +35,8 @@ chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
       sendResponse({
         appStatus: localStorage.appStatus,
         appHandledWeeks: localStorage.appHandledWeeks ? JSON.parse(localStorage.appHandledWeeks) : [],
-        appCurrentPage: localStorage.appCurrentPage
+        appCurrentPage: localStorage.appCurrentPage,
+        appContentPageId: localStorage.appContentPageId
       });
       break;
     case C.INTENT.PUSH_APP_STATUS:
@@ -41,17 +51,29 @@ chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
       });
       break;
     case C.INTENT.PUSH_LOG:
-      let message = request.message;
-      let level = request.level;
-      let timenow = new Date().toISOString();
-      let log = `${timenow} ${level} ${message}\n`;
-      console.log(log);
-      localStorage.log += log;
+      writeLog(request.level, request.message);
       sendResponse({});
       break;
     case C.INTENT.GET_LOG:
       sendResponse({ log: localStorage.log });
       break;
+    case C.INTENT.TRIGGER_EVENT:
+      chrome.windows.getAll(windows => {
+        for(let i in windows) {
+          let w = windows[i];
+          if(w !== undefined) {
+            chrome.tabs.getAllInWindow(w.id, tabs => {
+              let tab = tabs.find(tab => { return tab.url === 'https://interact2.responsys.net/interact/jsp/jindex.jsp' });
+              if(tab !== undefined) {
+                writeLog('DEBUG', 'Found tab id: ' + tab.id);
+                chrome.tabs.sendMessage(tab.id, { event: request.event }, resp => {
+                  sendResponse({});
+                });
+              }
+            });
+          }
+        }
+      });
     default:
       sendResponse({});
   }

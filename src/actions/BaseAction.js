@@ -39,6 +39,7 @@ class BaseAction {
 
   _needInIframe(iframe, expectingDocURL, selectors, then) {
     this._waitFor(() => {
+      Logger.debug('iframe content doc URL: ' + iframe.contentDocument.URL + ', readyState: ' + iframe.contentDocument.readyState);
       return iframe.contentDocument.URL === expectingDocURL && 
              iframe.contentDocument.readyState === 'complete';
     }, () => {
@@ -62,6 +63,12 @@ class BaseAction {
 
   _getReplacingInfo(callback) {
     chrome.extension.sendRequest({ intent: C.INTENT.GET_REPLACING_INFO }, callback);
+  }
+
+  _triggerEvent(event, callback) {
+    chrome.extension.sendRequest({ intent: C.INTENT.TRIGGER_EVENT, event: event }, resp => {
+      callback();
+    });
   }
 }
 
