@@ -7,10 +7,10 @@ const LOGIN_FORM = '#loginForm';
 
 class LoginAction extends BaseAction {
   _execute() {
-    this._need([USERNAME, PASSWORD, LOGIN_FORM], this._doLogin);
+    this._need([USERNAME, PASSWORD, LOGIN_FORM], this._login);
   }
 
-  _doLogin() {
+  _login() {
     chrome.extension.sendRequest({ intent: C.INTENT.USER_INFO }, response => {
       let username = response.username;
       let password = response.password;

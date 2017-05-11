@@ -14,6 +14,11 @@ const CONTENT_EDIT_BTN_EDIT = '#popHtmlInWizMenu #ui\\.popmenu\\.edit'
 const LEFT_TOP_CORNER_MENU = '#uifhamburgerbutton-1012';
 const MENU_ITEM_FOLDERS = '#menuitem-1028-itemEl';
 
+const EVENT_FOLDER_CLICKED = 'rs:folderClicked';
+const EVENT_WEEK_CLICKED = 'rs:weekClicked';
+const EVENT_AD_REPLACED = 'rs:adReplaced';
+const EVENT_LINK_TABLE_ADDED = 'rs:linkTableAdded';
+
 class ContentPageAction extends BaseAction {
   _execute() {
     this._getStages(stages => {
@@ -21,26 +26,39 @@ class ContentPageAction extends BaseAction {
       this.currentStageIndex = 0;
       this.currentWeekOnStage = this.stages[this.currentStageIndex].weeksRange[0];
       this._startListening();
+
+      this._on(EVENT_FOLDER_CLICKED, (e, stage) => {
+        this._goToContentPage(stage);
+      });
+
+      this._on(EVENT_WEEK_CLICKED, (e, weekName)=> {
+        this._openReplacingAdPopup(weekName);
+      });
+
+      this._on(EVENT_AD_REPLACED, e => {
+        this._openAddingLinkTablePopup();
+      });
+
+      this._on(EVENT_LINK_TABLE_ADDED, e => {
+        this._returnToFolderListPage();
+        this._changeCurrentWeek();
+        this._handleCurrentWeek();
+      });
+
+      // Bootstrap
+      this._handleCurrentWeek();
     });
   }
 
   _startListening() {
-    this._handleCurrentWeek();
-
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       Logger.debug('ContentPageAction received a message.');
-
       switch(message.event) {
         case C.CONTENT_PAGE_EVENTS.REPLACED_AD:
-          // this._openAddingLinkTablePopup();
-          this._returnFolderListPage();
-          this._changeCurrentWeek();
-          this._handleCurrentWeek();
+          this._trigger(EVENT_AD_REPLACED);
           break;
         case C.CONTENT_PAGE_EVENTS.ADDED_LINK_TABLE:
-          // this._returnFolderListPage();
-          // this._changeCurrentWeek();
-          // this._handleCurrentWeek();
+          this._trigger(EVENT_LINK_TABLE_ADDED);
           break;
       }
       sendResponse({});
@@ -49,47 +67,45 @@ class ContentPageAction extends BaseAction {
 
   _handleCurrentWeek() {
     if(this.currentStageIndex < 0) {
-      this._pushStatus({ appStatus: C.APP_STATUS.STOPPED });
+      this._pushStatus({ appStatus: C.APP_STATUS.STOPPED }); // Stop App
       Logger.info('Complete!');
       window.alert('Complete!');
       return;
     }
 
     this._need(FOLDER_LIST_IFRAME, () => {
-      this._needInIframe($(FOLDER_LIST_IFRAME)[0], FOLDER_LIST_IFRAME_URL, FOLDER_ITEMS, () => {
-        this._reloadContext();
-
-        let currentStage = this.stages[this.currentStageIndex];
-        this._openFolder(currentStage);
-        this._goToContentPage(currentStage);
-        this._openReplacingAdPopup(this.currentWeekName);
-      });
+      let currentStage = this.stages[this.currentStageIndex];
+      this._openFolder(currentStage)
     });
   }
 
   _goToContentPage(stage) {
     this._need(CONTENT_ITEMS, () => {
       let currentWeek = this._findWeek(stage, this.currentWeekOnStage);
-      this.currentWeekName = currentWeek.innerHTML;
-      Logger.info(`Going to content page... Current week: ${this.currentWeekName}`);
+      let weekName = currentWeek.innerHTML;
+      Logger.info(`Going to content page... Current week: ${weekName}`);
       currentWeek.click();
+      this._trigger(EVENT_WEEK_CLICKED, weekName);
     }, this.context);
   }
 
   _openFolder(stage) {
-    let $folderItems = this.$context.find(FOLDER_ITEMS);
-    Logger.debug('folder items count: ' + $folderItems.length);
-    let folder = $folderItems.toArray()
-                             .find(e => { return stage.folder === e.innerText; });
-    Logger.debug('folder name: ' + folder.innerHTML);
-    folder.click();
+    this._needInIframe($(FOLDER_LIST_IFRAME)[0], FOLDER_LIST_IFRAME_URL, FOLDER_ITEMS, () => {
+      this._reloadContext();
+      let $folderItems = this.$context.find(FOLDER_ITEMS);
+      Logger.debug('folder items count: ' + $folderItems.length);
+      let folder = $folderItems.toArray()
+                              .find(e => { return stage.folder === e.innerText; });
+      Logger.debug('folder name: ' + folder.innerHTML);
+      folder.click();
+      this._trigger(EVENT_FOLDER_CLICKED, stage);
+    });
   }
 
   _openReplacingAdPopup(weekName) {
     this._needInIframe($(FOLDER_LIST_IFRAME)[0], CONTENT_PAGE_IFRAME_URL_PREFIX + weekName, CONTENT_EDIT_BTN, () => {
       this._reloadContext();
       this.$context.find(CONTENT_EDIT_BTN)[0].click();
-
       this._need(CONTENT_EDIT_BTN_EDIT, () => {
         this.$context.find(CONTENT_EDIT_BTN_EDIT)[0].click();
       }, this.context);
@@ -100,7 +116,7 @@ class ContentPageAction extends BaseAction {
 
   }
 
-  _returnFolderListPage() {
+  _returnToFolderListPage() {
     $(LEFT_TOP_CORNER_MENU)[0].click();
     $(MENU_ITEM_FOLDERS)[0].click();
   }
@@ -159,6 +175,15 @@ class ContentPageAction extends BaseAction {
   _reloadContext() {
     this.context = $(FOLDER_LIST_IFRAME)[0].contentDocument;
     this.$context = $(this.context);
+  }
+
+  _on(event, callback) {
+    $(document).on(event, callback);
+  }
+
+  _trigger(event) {
+    Logger.debug('Event ' + event + ' triggered.');
+    $(document).trigger(event);
   }
 }
 

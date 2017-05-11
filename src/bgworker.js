@@ -57,6 +57,11 @@ chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
     case C.INTENT.GET_LOG:
       sendResponse({ log: localStorage.log });
       break;
+    case C.INTENT.PUSH_BACKUP:
+      let timenow = new Date().toISOString();
+      localStorage[`${timenow}/${request.backupName}`] = request.backupContent;
+      sendResponse({});
+      break;
     case C.INTENT.TRIGGER_EVENT:
       chrome.windows.getAll(windows => {
         for(let i in windows) {

@@ -146,6 +146,14 @@ class ReplaceAdAction extends BaseAction {
     }
     return rangeNodes;
   }
+
+  _pushBackup(backupName, backupContent, callback) {
+    chrome.extension.sendRequest({
+      intent: C.INTENT.PUSH_BACKUP,
+      backupName: backupName,
+      backupContent: backupContent
+    }, resp => { callback(); });
+  }
 }
 
 export default ReplaceAdAction;
