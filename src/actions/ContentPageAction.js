@@ -11,6 +11,8 @@ const POSTNATAL_ITEMS_PATTERN = /^TB_Stages_New_POST_Week(\d{2})(?:_Name)?$/;
 const CONTENT_ITEMS = '#contentbox > span > a:first-of-type';
 const CONTENT_EDIT_BTN = '#ui\\.campaignWizard\\.campaignDashboard\\.content + div > a:first-of-type';
 const CONTENT_EDIT_BTN_EDIT = '#popHtmlInWizMenu #ui\\.popmenu\\.edit'
+const CONTENT_LINK_TABLE = '#ui\\.campaignWizard\\.campaignDashboard\\.linkTable + div > a:first-of-type'
+const CONTENT_LINK_TABLE_EDIT = '#popLinkInWizMenu #ui\\.popmenu\\.viewEditData'
 const LEFT_TOP_CORNER_MENU = '#uifhamburgerbutton-1012';
 const MENU_ITEM_FOLDERS = '#menuitem-1028-itemEl';
 
@@ -113,7 +115,10 @@ class ContentPageAction extends BaseAction {
   }
 
   _openAddingLinkTablePopup() {
-
+    this.$context.find(CONTENT_LINK_TABLE)[0].click();
+    this._need(CONTENT_LINK_TABLE_EDIT, () => {
+      this.$context.find(CONTENT_LINK_TABLE_EDIT)[0].click();
+    }, this.context);
   }
 
   _returnToFolderListPage() {
@@ -181,9 +186,9 @@ class ContentPageAction extends BaseAction {
     $(document).on(event, callback);
   }
 
-  _trigger(event) {
+  _trigger(event, extra) {
     Logger.debug('Event ' + event + ' triggered.');
-    $(document).trigger(event);
+    $(document).trigger(event, extra);
   }
 }
 

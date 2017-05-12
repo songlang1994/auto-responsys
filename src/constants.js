@@ -11,6 +11,7 @@ export const INTENT = Object.freeze({
   GET_TB_STAGES: 'get-tb-stages',
   PUSH_LOG: 'push-log',
   GET_LOG: 'get-log',
+  CLEAR_LOG: 'clear-log',
   PUSH_BACKUP: 'push-backup',
   TRIGGER_EVENT: 'trigger-event'
 });

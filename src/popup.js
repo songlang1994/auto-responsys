@@ -11,7 +11,6 @@ class Popup {
     this.$pixelsSnippet = $('#pixelsSnippet');
     this.$linkTableName = $('#linkTableName');
     this.$prompt = $('#prompt');
-    this.$clearLogBtn = $('#clearLogBtn');
     this.$runBtn = $('#runBtn');
     this.$saveBtn = $('#saveBtn');
     this.$masking = $('#masking');
@@ -38,11 +37,6 @@ class Popup {
 
     this.$runBtn.on('click', this._run.bind(this));
     this.$stopBtn.on('click', this._stop.bind(this));
-
-    this.$clearLogBtn.on('click', e => {
-      localStorage.log = '';
-      this.$prompt.text('已清除日志');
-    })
   }
 
   saveUI() {

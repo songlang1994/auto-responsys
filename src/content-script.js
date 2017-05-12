@@ -2,6 +2,8 @@ import LoginAction from './actions/LoginAction';
 import GoToFoldersPageAction from './actions/GoToFoldersPageAction';
 import ContentPageAction from './actions/ContentPageAction';
 import ReplaceAdAction from './actions/ReplaceAdAction';
+import GoToLinkTableAction from './actions/GoToLinkTableAction';
+import AddLinkTableAction from './actions/AddLinkTableAction';
 
 $(document).ready(() => {
   let pathname = document.location.pathname;
@@ -22,6 +24,13 @@ $(document).ready(() => {
     case '/interact/formcab/FileEdit':
       new ReplaceAdAction().executeWithAppRunning();
       break;
+    // link table
+    case '/interact/jsp/en/lists/DataViewer.jsp':
+      new GoToLinkTableAction().executeWithAppRunning();
+      break;
+    // link table edit
+    case '/interact/jsp/en/lists/DataViewerEditRow.jsp':
+      new AddLinkTableAction().executeWithAppRunning();
     default:
       // ignore
   }

@@ -39,7 +39,9 @@ class BaseAction {
 
   _needInIframe(iframe, expectingDocURL, selectors, then) {
     this._waitFor(() => {
-      Logger.debug('iframe content doc URL: ' + iframe.contentDocument.URL + ', readyState: ' + iframe.contentDocument.readyState);
+      Logger.debug('iframe content doc URL: ' + iframe.contentDocument.URL +
+                    ', expecting URL: ' + expectingDocURL +
+                    ', readyState: ' + iframe.contentDocument.readyState);
       return iframe.contentDocument.URL === expectingDocURL && 
              iframe.contentDocument.readyState === 'complete';
     }, () => {

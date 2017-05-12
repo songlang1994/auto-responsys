@@ -6,13 +6,34 @@ if(localStorage.log === undefined) {
   localStorage.log = '';
 }
 
-let globalvars = {};
-
 function writeLog(level, message) {
   let timenow = new Date().toISOString();
-  let log = `${timenow} ${level} ${message}\n`;
+  let log = `${timenow} ${level} ${message}\n\0`;
   console.log(log);
   localStorage.log += log;
+}
+
+function findTabByUrl(url, callback) {
+  chrome.windows.getAll(windows => {
+    for(let i in windows) {
+      let w = windows[i];
+      try {
+        chrome.tabs.getAllInWindow(w.id, tabs => {
+          try {
+            let tab = tabs.find(tab => { return tab.url === url });
+            if(tab !== undefined) {
+              writeLog('DEBUG', 'Found tab id: ' + tab.id);
+              callback(tab);
+            }
+          } catch(exception) {
+            // ignore here. Occuring some undefined window or undefined tab error when window or tab is closed.
+          }
+        });
+      } catch(exception) {
+        // ignore here. Occuring some undefined window or undefined tab error when window or tab is closed.
+      }
+    }
+  });
 }
 
 chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
@@ -57,27 +78,20 @@ chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
     case C.INTENT.GET_LOG:
       sendResponse({ log: localStorage.log });
       break;
+    case C.INTENT.CLEAR_LOG:
+      localStorage.log = '';
+      sendResponse({});
+      break;
     case C.INTENT.PUSH_BACKUP:
       let timenow = new Date().toISOString();
       localStorage[`${timenow}/${request.backupName}`] = request.backupContent;
       sendResponse({});
       break;
     case C.INTENT.TRIGGER_EVENT:
-      chrome.windows.getAll(windows => {
-        for(let i in windows) {
-          let w = windows[i];
-          if(w !== undefined) {
-            chrome.tabs.getAllInWindow(w.id, tabs => {
-              let tab = tabs.find(tab => { return tab.url === 'https://interact2.responsys.net/interact/jsp/jindex.jsp' });
-              if(tab !== undefined) {
-                writeLog('DEBUG', 'Found tab id: ' + tab.id);
-                chrome.tabs.sendMessage(tab.id, { event: request.event }, resp => {
-                  sendResponse({});
-                });
-              }
-            });
-          }
-        }
+      findTabByUrl('https://interact2.responsys.net/interact/jsp/jindex.jsp', tab => {
+        chrome.tabs.sendMessage(tab.id, { event: request.event }, resp => {
+          sendResponse({});
+        });
       });
     default:
       sendResponse({});

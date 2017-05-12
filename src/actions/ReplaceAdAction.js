@@ -70,9 +70,10 @@ class ReplaceAdAction extends BaseAction {
   }
 
   _saveChanges() {
-    $(CONTENT_TEXTAREA).val(this.content);
-    // mock. not really submit changes
+    Logger.info('Saving link table.')
 
+    //$(CONTENT_TEXTAREA).val(this.content);
+    // mock. not really submit changes
     this._triggerEvent(C.CONTENT_PAGE_EVENTS.REPLACED_AD, () => {
       window.close();
     });
