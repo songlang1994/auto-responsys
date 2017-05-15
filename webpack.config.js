@@ -7,7 +7,8 @@ module.exports = {
     'content-script': './src/content-script',
     'bgworker': './src/bgworker',
     'popup': './src/popup',
-    'view-log': './src/view-log'
+    'view-log': './src/view-log',
+    'redirect': './src/redirect'
   },
 
   output: {

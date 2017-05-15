@@ -56,6 +56,7 @@ class Popup {
   _run() {
     localStorage.appStatus = C.APP_STATUS.RUNNING;
     this.$prompt.text('开始运行');
+    this.$masking.show();
 
     chrome.windows.create({
       url: RS_LOGIN_URL
