@@ -48,19 +48,57 @@ class Popup {
     localStorage.linkTableName = this.$linkTableName.val();
 
     let stages = this.$stages.toArray()
-                              .filter(e => { return e.checked; })
-                              .map(e => { return JSON.parse(e.value); });
+                             .filter(e => { return e.checked; })
+                             .map(e => { return JSON.parse(e.value); });
     localStorage.stages = JSON.stringify(stages);
   }
 
   _run() {
-    localStorage.appStatus = C.APP_STATUS.RUNNING;
-    this.$prompt.text('开始运行');
-    this.$masking.show();
+    let pixelsSnippetStr = localStorage.pixelsSnippet.trim().length > 0 ?
+                             localStorage.pixelsSnippet.trim() :
+                             '不改变Pixels Snippet';
+    let linkTableNameStr = localStorage.linkTableName.trim().length > 0 ?
+                             localStorage.linkTableName.trim() :
+                             '不加Link Table';
+    let stagesStr = JSON.parse(localStorage.stages).map(s => { return `-  ${s.name}`; }).join('\n');
 
-    chrome.windows.create({
-      url: RS_LOGIN_URL
-    });
+    let summary = []
+    summary.push(`User Name:\t${localStorage.username}\n\n` +
+                 `Password:\t${localStorage.password}`);
+
+    summary.push(`Stages:\n\n` +
+                 `${stagesStr}`);
+
+    summary.push(`Image URL:\n\n` +
+                 `${localStorage.imgSource}`);
+
+    summary.push(`Link URL:\n\n` +
+                  `${localStorage.linkUrl}`);
+
+    summary.push(`Pixels Snippet:\n\n` +
+                 `${pixelsSnippetStr}`);
+                 
+    summary.push(`Link Table Name:\n\n` +
+                 `${linkTableNameStr}`);
+
+    let confirmed = true;
+    for(let i in summary) {
+      let step = parseInt(i) + 1;
+      let txt = `${step}/${summary.length} Please confirm\n\n\n${summary[i]}`;
+      if(!confirm(txt)) {
+        confirmed = false;
+        break;
+      }
+    }
+
+    if(confirmed) {
+      localStorage.appStatus = C.APP_STATUS.RUNNING;
+      this.$prompt.text('开始运行');
+      this.$masking.show();
+      chrome.windows.create({
+        url: RS_LOGIN_URL
+      });
+    }
   }
 
   _stop() {
