@@ -115,10 +115,16 @@ class ContentPageAction extends BaseAction {
   }
 
   _openAddingLinkTablePopup() {
-    this.$context.find(CONTENT_LINK_TABLE)[0].click();
-    this._need(CONTENT_LINK_TABLE_EDIT, () => {
-      this.$context.find(CONTENT_LINK_TABLE_EDIT)[0].click();
-    }, this.context);
+    this._getReplacingInfo(info => {
+      if(info.linkTableName.trim().length > 0) {
+        this.$context.find(CONTENT_LINK_TABLE)[0].click();
+        this._need(CONTENT_LINK_TABLE_EDIT, () => {
+          this.$context.find(CONTENT_LINK_TABLE_EDIT)[0].click();
+        }, this.context);
+      } else {
+        this._trigger(EVENT_LINK_TABLE_ADDED);
+      }
+    });
   }
 
   _returnToFolderListPage() {

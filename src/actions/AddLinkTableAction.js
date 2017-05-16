@@ -9,6 +9,7 @@ const DISABLE_TRACKING = 'input[name="chkEXTERNAL_TRACKING"]';
 
 class AddLinkTableAction extends BaseAction {
   _execute() {
+    Logger.info('Start to add link table.')
     this._fillForm();
   }
 

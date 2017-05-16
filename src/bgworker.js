@@ -55,14 +55,11 @@ chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
     case C.INTENT.GET_APP_STATUS:
       sendResponse({
         appStatus: localStorage.appStatus,
-        appHandledWeeks: localStorage.appHandledWeeks ? JSON.parse(localStorage.appHandledWeeks) : [],
         appCurrentPage: localStorage.appCurrentPage,
-        appContentPageId: localStorage.appContentPageId
       });
       break;
     case C.INTENT.PUSH_APP_STATUS:
       if(request.appStatus !== undefined) localStorage.appStatus = request.appStatus;
-      if(request.appHandledWeeks !== undefined) localStorage.appHandledWeeks = request.appHandledWeeks;
       if(request.appCurrentPage !== undefined) localStorage.appCurrentPage = request.appCurrentPage;
       sendResponse({});
       break;
