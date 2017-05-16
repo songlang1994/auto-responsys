@@ -27,6 +27,7 @@ class ContentPageAction extends BaseAction {
       this.stages = stages;
       this.currentStageIndex = 0;
       this.currentWeekOnStage = this.stages[this.currentStageIndex].weeksRange[0];
+      this.currentItemOnWeek = 0;
       this._startListening();
 
       this._on(EVENT_FOLDER_CLICKED, (e, stage) => {
@@ -83,10 +84,14 @@ class ContentPageAction extends BaseAction {
 
   _goToContentPage(stage) {
     this._need(CONTENT_ITEMS, () => {
-      let currentWeek = this._findWeek(stage, this.currentWeekOnStage);
-      let weekName = currentWeek.innerHTML;
-      Logger.info(`Going to content page... Current week: ${weekName}`);
-      currentWeek.click();
+      let currentWeekItems = this._findWeek(stage, this.currentWeekOnStage);
+      this.currentWeekItemsCount = currentWeekItems.length;
+      let currentItem = currentWeekItems[this.currentItemOnWeek];
+      Logger.debug(`Current Week items: ${this.currentWeekItemsCount}, processing: ${this.currentItemOnWeek}`);
+      currentItem.click();
+
+      let weekName = currentItem.innerHTML;
+      Logger.info(`Going to content page... current: ${weekName}`);
       this._trigger(EVENT_WEEK_CLICKED, weekName);
     }, this.context);
   }
@@ -134,8 +139,14 @@ class ContentPageAction extends BaseAction {
 
   _changeCurrentWeek() {
     let currentStage = this.stages[this.currentStageIndex];
+    if(this.currentItemOnWeek < this.currentWeekItemsCount - 1) {
+      this.currentItemOnWeek += 1;
+      return;
+    }
+
     if(this.currentWeekOnStage < currentStage.weeksRange[1]) {
       this.currentWeekOnStage += 1;
+      this.currentItemOnWeek = 0;
       return;
     }
 
@@ -143,11 +154,11 @@ class ContentPageAction extends BaseAction {
       this.currentStageIndex += 1;
       currentStage = this.stages[this.currentStageIndex];
       this.currentWeekOnStage = currentStage.weeksRange[0];
+      this.currentItemOnWeek = 0;
       return;
     }
 
     this.currentStageIndex = -1;
-    this.currentWeekOnStage = -1;
     return;
   }
 
@@ -167,7 +178,7 @@ class ContentPageAction extends BaseAction {
     let startWeek = stage.weeksRange[0];
     let endWeek = stage.weeksRange[1];
     return this.$context.find(CONTENT_ITEMS).toArray()
-               .find(e => {
+               .filter(e => {
                  let match = e.innerText.match(regex);
                  if(match !== null && match.length > 1) {
                    let week = parseInt(match[1]);
