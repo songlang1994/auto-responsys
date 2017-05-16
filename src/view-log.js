@@ -12,7 +12,7 @@ $('#filter').on('change', e => {
     let log = response.log;
     log = log.split('\0')
              .filter(line => { return line.search(new RegExp(filter)) === 25; } )
-             .join('');
+             .join('\n\n\n');
     $('#log').text(log);
   });
 });

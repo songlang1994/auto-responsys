@@ -31,7 +31,6 @@ $(document).ready(() => {
     // link table edit
     case '/interact/jsp/en/lists/DataViewerEditRow.jsp':
       new AddLinkTableAction().executeWithAppRunning();
-    default:
-      // ignore
+      break;
   }
 });
