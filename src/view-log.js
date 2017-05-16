@@ -1,10 +1,5 @@
 import * as C from './constants';
 
-chrome.extension.sendRequest({intent: C.INTENT.GET_LOG }, response => {
-  let log = response.log;
-  $('#log').text(log);
-});
-
 $('#filter').on('change', e => {
   let filter = e.target.selectedOptions[0].value;
   console.log('filter: ' + filter);
@@ -25,3 +20,5 @@ $('#clear').on('click', e => {
     });
   }
 });
+
+$('#filter').change();
