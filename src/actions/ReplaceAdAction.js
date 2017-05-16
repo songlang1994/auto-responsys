@@ -6,6 +6,7 @@ const AD_AREA_COMMENT_PATTERN = /.*ad *card.*/i;
 const CONTENT_TEXTAREA = '#Contents'
 const AD_AREA_REPLACE_CONTENT_PATTERN = /^[ \t]*<!-- *\S* *ad *card *-->(?:.|\n)*<!-- *\S* *ad *card *-->[ \t]*$/img
 const PIXELS_AREA_REPLACE_CONTENT_PATTERN = /<\/table>((?:.|\n)*<\/body>)/im
+const SAVE_BTN = '#button-1011-btnIconEl'
 
 class ReplaceAdAction extends BaseAction {
   _execute() {
@@ -76,13 +77,10 @@ class ReplaceAdAction extends BaseAction {
   }
 
   _saveChanges() {
-    Logger.info('Saving link table.')
-
-    //$(CONTENT_TEXTAREA).val(this.content);
     // mock. not really submit changes
-    // this._triggerEvent(C.CONTENT_PAGE_EVENTS.REPLACED_AD, () => {
-    //   window.close();
-    // });
+    // TODO: 
+    Logger.info('Saving AD...');
+    $(SAVE_BTN)[0].click();
   }
 
   _doReplacePixels(pixelsSnippet) {

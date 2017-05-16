@@ -2,6 +2,7 @@ import LoginAction from './actions/LoginAction';
 import GoToFoldersPageAction from './actions/GoToFoldersPageAction';
 import ContentPageAction from './actions/ContentPageAction';
 import ReplaceAdAction from './actions/ReplaceAdAction';
+import ReplaceAdCompleteAction from './actions/ReplaceAdCompleteAction';
 import GoToLinkTableAction from './actions/GoToLinkTableAction';
 import AddLinkTableAction from './actions/AddLinkTableAction';
 
@@ -23,6 +24,10 @@ $(document).ready(() => {
     // edit AD HTML page
     case '/interact/formcab/FileEdit':
       new ReplaceAdAction().executeWithAppRunning();
+      break;
+    // save AD HTML action
+    case '/interact/formcab/FileEditAction':
+      new ReplaceAdCompleteAction().executeWithAppRunning();
       break;
     // link table
     case '/interact/jsp/en/lists/DataViewer.jsp':
