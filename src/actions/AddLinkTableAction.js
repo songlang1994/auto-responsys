@@ -37,8 +37,17 @@ class AddLinkTableAction extends BaseAction {
   }
 
   _saveChanges() {
-    Logger.info('Saving link table...');
-    $(SAVE_BTN)[0].click();
+    this._getStatus(appStatus => {
+      if(appStatus.isReadonly) {
+        Logger.info('Readonly mode. Do not save any change on link table');
+        this._triggerEvent(C.CONTENT_PAGE_EVENTS.ADDED_LINK_TABLE, () => {
+          window.close();
+        });
+      } else {
+        Logger.info('Saving link table...');
+        $(SAVE_BTN)[0].click();
+      }
+    });
   }
 
   _fillForm() {

@@ -1,9 +1,18 @@
 import * as C from './constants';
 import Logger from './Logger';
 
-// init log
+// init storage
 if(localStorage.log === undefined) {
   localStorage.log = '';
+}
+if(localStorage.appStatus === undefined) {
+  localStorage.appStatus = C.APP_STATUS.STOPPED;
+}
+if(localStorage.isReadonly === undefined) {
+  localStorage.isReadonly = true;
+}
+if(localStorage.stages === undefined) {
+  localStorage.stages = '[]';
 }
 
 function writeLog(level, message) {
@@ -55,12 +64,11 @@ chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
     case C.INTENT.GET_APP_STATUS:
       sendResponse({
         appStatus: localStorage.appStatus,
-        appCurrentPage: localStorage.appCurrentPage,
+        isReadonly: JSON.parse(localStorage.isReadonly)
       });
       break;
     case C.INTENT.PUSH_APP_STATUS:
       if(request.appStatus !== undefined) localStorage.appStatus = request.appStatus;
-      if(request.appCurrentPage !== undefined) localStorage.appCurrentPage = request.appCurrentPage;
       sendResponse({});
       break;
     case C.INTENT.GET_TB_STAGES:

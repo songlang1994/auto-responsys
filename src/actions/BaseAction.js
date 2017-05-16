@@ -5,7 +5,6 @@ class BaseAction {
   executeWithAppRunning() {
     chrome.extension.sendRequest({ intent: C.INTENT.GET_APP_STATUS }, response => {
       if(response.appStatus === C.APP_STATUS.RUNNING) {
-        this._pushCurrentPage();
         this._execute();
       }
     });
@@ -53,10 +52,6 @@ class BaseAction {
     chrome.extension.sendRequest(
       Object.assign(status, { intent: C.INTENT.PUSH_APP_STATUS })
     );
-  }
-
-  _pushCurrentPage() {
-    this._pushStatus({ appCurrentPage: document.location.pathname });
   }
 
   _getStatus(callback) {

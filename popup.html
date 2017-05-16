@@ -9,7 +9,7 @@
 </head>
 <body>
   <div id="masking">
-    <p>正在运行...</p>
+    <p id="maskingText"></p>
     <button id="stopBtn">停止</button>
   </div>
   <div class="container">
@@ -37,7 +37,8 @@
       <label for="linkTableName">Link Table名称（可选）</label>
       <input type="text" id="linkTableName">
       <span class="prompt" id="prompt"></span>
-      <button id="runBtn" class="btn">开始运行</button>
+      <button id="runBtn" class="btn">运行</button>
+      <button id="readonlyRunBtn" class="btn">运行(只读)</button>
       <button id="saveBtn" class="btn">保存</button>
       <a target="_blank" href="view-log.html" class="btn">查看日志</a>
     </div>

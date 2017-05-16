@@ -79,10 +79,18 @@ class ReplaceAdAction extends BaseAction {
   }
 
   _saveChanges() {
-    // mock. not really submit changes
-    // TODO: 
-    Logger.info('Saving AD...');
-    $(SAVE_BTN)[0].click();
+    this._getStatus(appStatus => {
+      if(appStatus.isReadonly) {
+        Logger.info('Readonly mode. Do not save any change on AD replacing.');
+        this._triggerEvent(C.CONTENT_PAGE_EVENTS.REPLACED_AD, () => {
+          window.close();
+        });
+      } else {
+        // TODO: 
+        Logger.info('Saving AD...');
+        $(SAVE_BTN)[0].click();
+      }
+    });
   }
 
   _doReplacePixels(pixelsSnippet) {

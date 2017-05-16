@@ -15,11 +15,14 @@ class Popup {
     this.$saveBtn = $('#saveBtn');
     this.$masking = $('#masking');
     this.$stopBtn = $('#stopBtn');
+    this.$readonlyRunBtn = $('#readonlyRunBtn');
+    this.$maskingText = $('#maskingText');
   }
 
   setupUI() {
     this._setupUserInfo();
     this._setupStage();
+    this._setupMaskingText();
 
     if(localStorage.appStatus === C.APP_STATUS.RUNNING) {
       this.$masking.show();
@@ -35,7 +38,19 @@ class Popup {
       this.$prompt.text('保存成功');
     });
 
-    this.$runBtn.on('click', this._run.bind(this));
+    this.$readonlyRunBtn.on('click', e => {
+      localStorage.isReadonly = true;
+      this._setupMaskingText();
+      alert('只读模式不会更改任何东西。\n\n你可以放心地用这种方式运行，运行完成后，查看日志瞄一瞄程序的输出。');
+      this._run();
+    });
+
+    this.$runBtn.on('click', e => {
+      localStorage.isReadonly = false;
+      this._setupMaskingText();
+      this._run();
+    });
+
     this.$stopBtn.on('click', this._stop.bind(this));
   }
 
@@ -54,6 +69,11 @@ class Popup {
   }
 
   _run() {
+    if(JSON.parse(localStorage.stages).length === 0) {
+      alert('至少选一个目标阶段。');
+      return;
+    }
+
     let pixelsSnippetStr = localStorage.pixelsSnippet.trim().length > 0 ?
                              localStorage.pixelsSnippet.trim() :
                              '不改变Pixels Snippet';
@@ -128,6 +148,11 @@ class Popup {
         e.checked = true;
       }
     });
+  }
+
+  _setupMaskingText() {
+    let text = localStorage.isReadonly === 'true' ? '正在运行（只读）...' : '正在运行...';
+    this.$maskingText.text(text);
   }
 }
 
