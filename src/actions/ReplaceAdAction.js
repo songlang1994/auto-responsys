@@ -53,6 +53,8 @@ class ReplaceAdAction extends BaseAction {
               let pixelsSnippet = info.pixelsSnippet.trim()
               if(pixelsSnippet.length > 0) {
                 this._doReplacePixels(pixelsSnippet);
+              } else {
+                Logger.info("Pixels Snippet needn't to be changed.");
               }
               // save changes
               this._saveChanges();

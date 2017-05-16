@@ -6,18 +6,39 @@ const FORM = 'form[name="paginatedTable"]';
 const LINK_NAME = 'input[name="LINK_NAME"]';
 const LINK_URL = 'textarea[name="LINK_URL"]';
 const DISABLE_TRACKING = 'input[name="chkEXTERNAL_TRACKING"]';
+const SAVE_BTN = '#ui\\.common\\.save'
+
+const PROMPT_CONTAINER = '#nwContent > div:first-child';
+const SUCCESS_MESSAGE = 'Your new record is added successfully.'
+
+
 
 class AddLinkTableAction extends BaseAction {
   _execute() {
-    Logger.info('Start to add link table.')
-    this._fillForm();
+    let prompt = $(PROMPT_CONTAINER).text();
+    switch(prompt) {
+      case '':
+        Logger.info('Start to add link table.');
+        this._fillForm();
+        break;
+      case SUCCESS_MESSAGE:
+        Logger.info('Saving link table completed.');
+        this._triggerEvent(C.CONTENT_PAGE_EVENTS.ADDED_LINK_TABLE, () => {
+          window.close();
+        });
+        break;
+      default:
+        Logger.error('Unexpected message appeared on link table edit page.')
+        // go ahead
+        this._triggerEvent(C.CONTENT_PAGE_EVENTS.ADDED_LINK_TABLE, () => {
+          window.close();
+        });
+    }
   }
 
   _saveChanges() {
-    Logger.info('Saving link table.')
-    this._triggerEvent(C.CONTENT_PAGE_EVENTS.ADDED_LINK_TABLE, () => {
-      window.close();
-    });
+    Logger.info('Saving link table...');
+    $(SAVE_BTN)[0].click();
   }
 
   _fillForm() {

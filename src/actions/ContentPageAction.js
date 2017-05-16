@@ -127,6 +127,7 @@ class ContentPageAction extends BaseAction {
           this.$context.find(CONTENT_LINK_TABLE_EDIT)[0].click();
         }, this.context);
       } else {
+        Logger.info("Link Table needn't to be added.");
         this._trigger(EVENT_LINK_TABLE_ADDED);
       }
     });
