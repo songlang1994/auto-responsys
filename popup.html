@@ -1,45 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Auto Responsys</title>
+	<title>TB Responsys - Automatically fill in TheBump Email Responsys</title>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="dist/popup.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/popup.css">
   <script src="lib/jquery.min.js" defer></script>
   <script src="dist/popup.js" defer></script>
 </head>
 <body>
   <div id="masking">
-    <p id="maskingText"></p>
-    <button id="stopBtn">停止</button>
+    <div>
+      <p id="maskingText"></p>
+      <button id="stopBtn" class="btn btn-primary">停止</button>
+    </div>
   </div>
   <div class="container">
     <div class="row">
-      <div class="login-form" id="loginForm">
-        <label for="username">用户名</label>
-        <input type="text" id="username">
-        <label for="password">密码</label>
-        <input type="text" id="password">
+      <div class="col-xs-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">登录信息</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="username">用户名</label>
+              <input type="text" id="username" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="password">密码</label>
+              <input type="text" id="password" class="form-control">
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div class="config-form" id="configForm">
-        <label>选择目标阶段</label>
-        <div class="stages"></div>
+      <div class="col-xs-6" id="stageForm">
+        <div class="panel panel-default">
+          <div class="panel-heading">目标阶段</div>
+          <div class="panel-body">
+            <div id="stages"></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="replace-form">
-      <label for="imgSource">图片地址</label>
-      <textarea type="text" id="imgSource" rows="5"></textarea>
-      <label for="linkUrl">链接地址</label>
-      <textarea type="text" id="linkUrl" rows="6"></textarea>
-      <label for="pixelsSnippet">pixels片段（可选）</label>
-      <textarea type="text" id="pixelsSnippet" rows="12"></textarea>
-      <label for="linkTableName">Link Table名称（可选）</label>
-      <input type="text" id="linkTableName">
-      <span class="prompt" id="prompt"></span>
-      <button id="runBtn" class="btn">运行</button>
-      <button id="readonlyRunBtn" class="btn">运行(只读)</button>
-      <button id="saveBtn" class="btn">保存</button>
+    <div class="panel panel-default">
+      <div class="panel-heading">替换信息</div>
+      <div class="panel-body">
+        <div class="form-group">
+          <label for="imgSource">图片地址</label>
+          <textarea type="text" id="imgSource" rows="4" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="linkUrl">链接地址</label>
+          <textarea type="text" id="linkUrl" rows="4" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="pixelsSnippet">pixels片段（可选）</label>
+          <textarea type="text" id="pixelsSnippet" rows="8" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="linkTableName">Link Table名称（可选）</label>
+          <input type="text" id="linkTableName" class="form-control">
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="operation clearfix">
+      <span id="prompt"></span>
+      <button id="runBtn" class="btn btn-primary">运行</button>
+      <button id="readonlyRunBtn" class="btn btn-primary">运行(只读)</button>
+      <button id="saveBtn" class="btn btn-primary">保存</button>
       <a target="_blank" href="view-log.html" class="btn">查看日志</a>
     </div>
   </div>

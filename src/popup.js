@@ -26,6 +26,8 @@ class Popup {
 
     if(localStorage.appStatus === C.APP_STATUS.RUNNING) {
       this.$masking.show();
+    } else {
+      this.$masking.hide();
     }
 
     this.$imgSource.val(localStorage.imgSource);
@@ -138,8 +140,13 @@ class Popup {
   _setupStage() {
     // create stage checkboxes
     C.TB_STAGES.forEach(e => {
-      $('#configForm .stages').append(
-        `<label><input type="checkbox" class="stage" value='${JSON.stringify(e)}'>${e.name}</label>`
+      $('#stages').append(
+       `<div class="checkbox">
+          <label>
+            <input type="checkbox" value="${JSON.stringify(e)}">
+              ${e.name}
+          </label>
+        </div>`
       );
     });
 
