@@ -86,8 +86,8 @@ class ReplaceAdAction extends BaseAction {
           window.close();
         });
       } else {
-        // TODO: 
         Logger.info('Saving AD...');
+        $(CONTENT_TEXTAREA).val(this.content);
         $(SAVE_BTN)[0].click();
       }
     });
