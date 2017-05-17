@@ -1,13 +1,13 @@
 {
-  "name": "Auto-Responsys",
+  "name": "TB-Responsys",
   "version": "0.1",
   "manifest_version": 2,
-  "description": "Auto Fill in Responsys",
+  "description": "Auto Fill in TheBump Email Responsys",
 
   "permissions": ["tabs"],
 
   "browser_action": {
-    "default_title": "Auto-Responsys",
+    "default_title": "TB-Responsys",
     "default_popup": "redirect.html"
   },
 
