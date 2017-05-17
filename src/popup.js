@@ -74,6 +74,9 @@ class Popup {
       return;
     }
 
+    // save UI before every running
+    this.saveUI();
+
     let pixelsSnippetStr = localStorage.pixelsSnippet.trim().length > 0 ?
                              localStorage.pixelsSnippet.trim() :
                              '不改变Pixels Snippet';
