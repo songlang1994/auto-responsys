@@ -59,29 +59,29 @@ class ReplaceAdAction extends BaseAction {
               // save changes
               this._saveChanges();
             } else {
-              errormsg = 'AD is not replaced. Because: Can not match replacing area.'
+              errormsg = 'AD was not replaced. Because: Could not match replacing area.'
             }
           });
         } else {
-          errormsg = 'AD is not replaced. Because: Expect 1 <a> tag and 1 <img> tag in <tr> tag.';
+          errormsg = 'AD was not replaced. Because: Expect 1 <a> tag and 1 <img> tag in <tr> tag.';
         }
       } else {
-        errormsg = 'AD is not replaced. Because: Expect there is 1 (and only 1) TR tag between two ad card comments.';
+        errormsg = 'AD was not replaced. Because: Expect there was 1 (and only 1) TR tag between two ad card comments.';
       }
     } else {
-      errormsg = 'AD is not replaced. Because: Expect ad card comment is 2 but actually is ' + adCard.length;
+      errormsg = 'AD was not replaced. Because: Expect ad card comment was 2 but actually was ' + adCard.length;
     }
 
     if (errormsg !== undefined) {
       Logger.error(errormsg);
-      Logger.error('Pixels Snippet is not replaced. Because: AD is not replaced.');
+      Logger.error('Pixels Snippet was not replaced. Because: AD was not replaced.');
     }
   }
 
   _saveChanges() {
     this._getStatus(appStatus => {
       if(appStatus.isReadonly) {
-        Logger.info('Readonly mode. Do not save any change on AD replacing.');
+        Logger.info('Readonly mode. Did not save any change on AD replacing.');
         this._triggerEvent(C.CONTENT_PAGE_EVENTS.REPLACED_AD, () => {
           window.close();
         });
@@ -111,7 +111,7 @@ class ReplaceAdAction extends BaseAction {
                      this.content.substring(area.index + area.length);
 
     } else{
-      Logger.error('Pixels Snippet is not replaced. Because: Can not find the area.');
+      Logger.error('Pixels Snippet was not replaced. Because: Could not find the area.');
     }
   }
 
