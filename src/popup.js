@@ -143,7 +143,7 @@ class Popup {
       $('#stages').append(
        `<div class="checkbox">
           <label>
-            <input type="checkbox" value="${JSON.stringify(e)}">
+            <input type="checkbox" class="stage" value="${JSON.stringify(e)}">
               ${e.name}
           </label>
         </div>`
