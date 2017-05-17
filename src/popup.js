@@ -138,16 +138,15 @@ class Popup {
   }
 
   _setupStage() {
-    // create stage checkboxes
     C.TB_STAGES.forEach(e => {
-      $('#stages').append(
-       `<div class="checkbox">
-          <label>
-            <input type="checkbox" class="stage" value="${JSON.stringify(e)}">
-              ${e.name}
-          </label>
+      // create stage checkboxes
+      let $element = $(
+        `<div class="checkbox">
+          <label><input type="checkbox" class="stage">${e.name}</label>
         </div>`
       );
+      $element.find('.stage').val(JSON.stringify(e))
+      $('#stages').append($element);
     });
 
     this.$stages = $('.stage');
