@@ -35,10 +35,12 @@ function findTabByUrl(url, callback) {
               callback(tab);
             }
           } catch(exception) {
+            writeLog('DEBUG', 'exception:' + exception);
             // ignore here. Occuring some undefined window or undefined tab error when window or tab is closed.
           }
         });
       } catch(exception) {
+        writeLog('DEBUG', 'exception:' + exception);
         // ignore here. Occuring some undefined window or undefined tab error when window or tab is closed.
       }
     }
