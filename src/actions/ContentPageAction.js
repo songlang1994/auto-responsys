@@ -13,8 +13,6 @@ const CONTENT_EDIT_BTN = '#ui\\.campaignWizard\\.campaignDashboard\\.content + d
 const CONTENT_EDIT_BTN_EDIT = '#popHtmlInWizMenu #ui\\.popmenu\\.edit'
 const CONTENT_LINK_TABLE = '#ui\\.campaignWizard\\.campaignDashboard\\.linkTable + div > a:first-of-type'
 const CONTENT_LINK_TABLE_EDIT = '#popLinkInWizMenu #ui\\.popmenu\\.viewEditData'
-const LEFT_TOP_CORNER_MENU = '#uifhamburgerbutton-1012';
-const MENU_ITEM_FOLDERS = '#menuitem-1028-itemEl';
 
 const EVENT_FOLDER_CLICKED = 'rs:folderClicked';
 const EVENT_WEEK_CLICKED = 'rs:weekClicked';
@@ -134,8 +132,7 @@ class ContentPageAction extends BaseAction {
   }
 
   _returnToFolderListPage() {
-    $(LEFT_TOP_CORNER_MENU)[0].click();
-    $(MENU_ITEM_FOLDERS)[0].click();
+    window.history.back()
   }
 
   _changeCurrentWeek() {

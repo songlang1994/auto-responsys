@@ -43,7 +43,7 @@ class Popup {
     this.$readonlyRunBtn.on('click', e => {
       localStorage.isReadonly = true;
       this._setupMaskingText();
-      alert('只读模式不会更改任何东西。\n\n你可以放心地用这种方式运行，运行完成后，查看日志瞄一瞄程序的输出。');
+      alert('只读模式不会在responsys上提交任何数据。');
       this._run();
     });
 
@@ -102,7 +102,7 @@ class Popup {
 
     summary.push(`Pixels Snippet:\n\n` +
                  `${pixelsSnippetStr}`);
-                 
+
     summary.push(`Link Table Name:\n\n` +
                  `${linkTableNameStr}`);
 
